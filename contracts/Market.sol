@@ -20,14 +20,43 @@ contract Market{
         uint price;
     }
 
-    
+
     uint private _listingId = 0;
+
+    event Listed (
+        uint listingId,
+        address seller,
+        address token,
+        uint tokenId,
+        uint price
+    );
+
+    event Sale (
+        uint listingId,
+        address buyer,
+        address token,
+        uint tokenId,
+        uint price
+    );
+
+    event Cancel(    
+        uint listingId,
+        address seller
+    );
+
     mapping(uint => Listing) private _listings;
+
+    function getListing(uint listingId) public view returns(Listing memory){
+        return _listings[listingId];
+    }
+
     function listToken(address token, uint idToken, uint price) external {
         IERC721(token).transferFrom(msg.sender,address(this) , idToken);
         Listing memory listing = Listing(ListingStatus.Actiave ,
             msg.sender,token,idToken,price);
         _listings[_listingId++]  = listing;
+
+        emit Listed(_listingId, msg.sender, token, idToken, price);
     }
 
     function buyToken(uint listingId) external payable {
@@ -51,7 +80,8 @@ contract Market{
             listing.idToken);
 
         payable(listing.seller).transfer(listing.price);
-        
+
+        emit Sale(listingId, msg.sender, listing.token, listing.idToken, listing.price);  
     }
 
     function cancel(uint listingId) public{
@@ -63,5 +93,7 @@ contract Market{
         listing.stauts = ListingStatus.Cancelled;
         IERC721(listing.token).transferFrom(address(this), msg.sender, 
             listing.idToken);
+
+        emit Cancel(listingId, msg.sender);
     }
 }

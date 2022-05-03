@@ -1,1 +1,2 @@
 - {DONE} creating Market smart contract part 1
+- {DONE} creating Market smart contract part 2
