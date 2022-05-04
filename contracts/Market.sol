@@ -51,7 +51,7 @@ contract Market{
     }
 
     function listToken(address token, uint idToken, uint price) external {
-        IERC721(token).transferFrom(msg.sender,address(this) , idToken);
+        IERC721(token).transferFrom(msg.sender, address(this) , idToken);
         Listing memory listing = Listing(ListingStatus.Actiave ,
             msg.sender,token,idToken,price);
         _listings[_listingId++]  = listing;
