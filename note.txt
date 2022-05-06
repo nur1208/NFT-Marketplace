@@ -1,2 +1,3 @@
 - {DONE} creating Market smart contract part 1
 - {DONE} creating NFT smart contract using openzeppelin contracts           
+- {DONE} testing listToken in Market contract.
